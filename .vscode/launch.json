@@ -1,0 +1,38 @@
+{
+    "configurations": [
+        {
+            "name": "C/C++: g++.exe 활성 파일 빌드 및 디버그",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}\\debug\\main.exe",
+            "args": ["${input:programArgs}"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "",
+            "setupCommands": [
+                {
+                    "description": "gdb에 자동 서식 지정 사용",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "디스어셈블리 버전을 Intel(으)로 설정",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "CMake 디버그 빌드"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "programArgs",
+            "type": "promptString",
+            "description": "실행 인자 입력"
+        }
+    ],
+    "version": "2.0.0"
+}

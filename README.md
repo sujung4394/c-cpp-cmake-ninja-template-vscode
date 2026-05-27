@@ -39,6 +39,14 @@ git update-index --skip-worktree .vscode/launch.json
 git update-index --skip-worktree .vscode/c_cpp_properties.json
 ```
 
+PROJECT_NAME에 사용하고자 하는 프로젝트의 이름을 넣습니다. 
+
+### `CMakeLists.txt`
+
+```cmake
+project(PROJECT_NAME LANGUAGES CXX)
+```
+
 ## 빌드
 
 `Ctrl+Shift+P` → **CMake: Configure** 실행 후:

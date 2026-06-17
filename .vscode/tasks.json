@@ -3,7 +3,7 @@
         {
             "type": "shell",
             "label": "CMake 디버그 빌드",
-            "command": "cmake --build ${workspaceFolder}\\build --config Debug",
+            "command": "cmake --build \"${workspaceFolder}\\build\" --config Debug",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -17,7 +17,7 @@
         {
             "type": "shell",
             "label": "CMake 빌드",
-            "command": "cmake --build ${workspaceFolder}\\build --config Release",
+            "command": "cmake --build \"${workspaceFolder}\\build\" --config Release",
             "options": {
                 "cwd": "${workspaceFolder}"
             },

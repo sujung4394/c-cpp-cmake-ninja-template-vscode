@@ -13,6 +13,9 @@
             "MIMode": "gdb",
             // Path에 MSYS2 ucrt64/bin 이 있으면 이름만으로 찾습니다.
             "miDebuggerPath": "gdb.exe",
+            // cppdbg(gdb)는 "console"(enum) 속성을 지원하지 않습니다(그건 cppvsdbg 전용).
+            // Windows에서 false로 두면 VSCode 통합 터미널로 입출력이 리다이렉션되어
+            // std::cin도 정상 동작합니다. true로 하면 별도 콘솔 창이 뜹니다.
             "externalConsole": false,
             "setupCommands": [
                 {

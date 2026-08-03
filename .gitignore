@@ -10,4 +10,4 @@ debug/
 data/
 
 # vscode 설정 파일
-./vscode
+# .vscode

@@ -31,6 +31,12 @@
 "compilerPath": "<g++.exe 경로>"
 ```
 
+경로를 채운 후, 주석을 해제하여 git이 이 파일들을 무시하도록 설정합니다.
+### `.gitignore`
+```
+.vscode
+```
+
 PROJECT_NAME에 사용하고자 하는 프로젝트의 이름을 넣습니다. 
 
 ### `CMakeLists.txt`

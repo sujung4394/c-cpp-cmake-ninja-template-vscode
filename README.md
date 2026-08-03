@@ -6,7 +6,7 @@ clone 후 F5만 누르면 빌드와 디버깅이 됩니다.
 ## 요구 사항
 
 - MSYS2 UCRT64 툴체인 (GCC, G++, GDB), CMake 3.20+, Ninja
-- **설치 방법은 [docs/INSTALL.md](docs/INSTALL.md)를 따라 주세요.**
+- **설치 방법은 [INSTALL.md](INSTALL.md)를 따라 주세요.**
 
 `C:\msys64\ucrt64\bin`이 시스템 Path에 등록되어 있어야 합니다.
 이 템플릿은 절대경로를 하드코딩하지 않고 Path에서 도구를 찾습니다.

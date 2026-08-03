@@ -1,0 +1,8 @@
+{
+    // 이 폴더를 처음 열면 VSCode가 아래 확장 설치를 자동으로 안내합니다.
+    "recommendations": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake"
+    ]
+}

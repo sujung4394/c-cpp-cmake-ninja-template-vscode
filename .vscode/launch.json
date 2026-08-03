@@ -1,17 +1,19 @@
 {
+    "version": "2.0.0",
     "configurations": [
         {
-            "name": "C/C++: g++.exe 활성 파일 빌드 및 디버그",
+            // F5의 기본 동작. 인자를 묻지 않습니다.
+            "name": "디버그 (gdb)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\debug\\main.exe",
-            "args": ["${input:programArgs}"],
-            "stopAtEntry": false,
+            "program": "${workspaceFolder}/debug/main.exe",
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
+            "stopAtEntry": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "",
+            // Path에 MSYS2 ucrt64/bin 이 있으면 이름만으로 찾습니다.
+            "miDebuggerPath": "gdb.exe",
+            "externalConsole": false,
             "setupCommands": [
                 {
                     "description": "gdb에 자동 서식 지정 사용",
@@ -24,15 +26,40 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "CMake 디버그 빌드"
+            "preLaunchTask": "Debug 빌드"
+        },
+        {
+            // 인자가 필요할 때만 이 구성을 고르세요.
+            // 인자가 여러 개라면 args와 tasks.json의 inputs에 항목을 추가합니다.
+            //   "args": ["${input:arg1}", "${input:arg2}"]
+            "name": "디버그 (인자 입력)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/debug/main.exe",
+            "args": [
+                "${input:arg1}"
+            ],
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "stopAtEntry": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "gdb.exe",
+            "externalConsole": false,
+            "setupCommands": [
+                {
+                    "description": "gdb에 자동 서식 지정 사용",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Debug 빌드"
         }
     ],
     "inputs": [
         {
-            "id": "programArgs",
+            "id": "arg1",
             "type": "promptString",
-            "description": "실행 인자 입력"
+            "description": "실행 인자 (예: 입력 파일 경로)"
         }
-    ],
-    "version": "2.0.0"
+    ]
 }

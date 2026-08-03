@@ -1,51 +1,101 @@
 {
+    "version": "2.0.0",
     "tasks": [
         {
+            // build/ 폴더가 없어도 빌드 태스크가 알아서 이 태스크를 먼저 실행합니다.
+            "label": "CMake 구성",
             "type": "shell",
-            "label": "CMake 디버그 빌드",
-            "command": "cmake --build \"${workspaceFolder}\\build\" --config Debug",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$gcc"
+            "command": "cmake",
+            "args": [
+                "-S", "${workspaceFolder}",
+                "-B", "${workspaceFolder}/build",
+                "-G", "Ninja Multi-Config",
+                "-DCMAKE_MAKE_PROGRAM=ninja",
+                "-DCMAKE_C_COMPILER=gcc",
+                "-DCMAKE_CXX_COMPILER=g++"
             ],
-            "group": {
-                "kind": "build"
-            }
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "silent"
+            },
+            "detail": "CMake 구성 (build/ 생성)"
         },
         {
+            "label": "Release 빌드",
             "type": "shell",
-            "label": "CMake 빌드",
-            "command": "cmake --build \"${workspaceFolder}\\build\" --config Release",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
+            "command": "cmake",
+            "args": [
+                "--build", "${workspaceFolder}/build",
+                "--config", "Release"
+            ],
+            "dependsOn": "CMake 구성",
             "problemMatcher": [
                 "$gcc"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "detail": "bin/main.exe 생성 (Ctrl+Shift+B)"
         },
         {
+            "label": "Debug 빌드",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "${workspaceFolder}/build",
+                "--config", "Debug"
+            ],
+            "dependsOn": "CMake 구성",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "debug/main.exe 생성 (F5가 자동으로 실행)"
+        },
+        {
+            // 인자가 필요 없는 기본 실행. Ctrl+Shift+P → Run Test Task
+            "label": "실행",
             "type": "process",
-            "label": "C/C++ 파일 실행",
-            "command": "${workspaceFolder}\\bin\\main.exe",
-            "args": ["${input:programArgs}"],
+            "command": "${workspaceFolder}/bin/main.exe",
+            "dependsOn": "Release 빌드",
+            "problemMatcher": [],
             "group": {
                 "kind": "test",
                 "isDefault": true
-            }
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "detail": "bin/main.exe 실행"
+        },
+        {
+            // 인자가 필요할 때만 쓰는 실행 태스크.
+            // 인자가 여러 개라면 args와 inputs에 항목을 추가하세요.
+            //   "args": ["${input:arg1}", "${input:arg2}"]
+            "label": "실행 (인자 입력)",
+            "type": "process",
+            "command": "${workspaceFolder}/bin/main.exe",
+            "args": [
+                "${input:arg1}"
+            ],
+            "dependsOn": "Release 빌드",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "detail": "인자를 입력받아 bin/main.exe 실행"
         }
     ],
     "inputs": [
         {
-            "id": "programArgs",
+            "id": "arg1",
             "type": "promptString",
-            "description": "실행 인자 입력"
+            "description": "실행 인자 (예: 입력 파일 경로)"
         }
-    ],
-    "version": "2.0.0"
+    ]
 }

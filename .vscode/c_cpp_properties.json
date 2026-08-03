@@ -2,18 +2,18 @@
     "configurations": [
         {
             "name": "Win32",
+            // 빌드가 한 번이라도 돌면 이 파일이 생기고, 그때부터 IntelliSense는
+            // 실제 컴파일 플래그를 그대로 따라갑니다. define을 손으로 적을 필요가 없습니다.
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+            // compile_commands.json 이 아직 없을 때를 위한 예비 설정입니다.
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/src/**"
             ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "cStandard": "c17",
+            "defines": [],
+            "compilerPath": "g++.exe",
+            "cStandard": "gnu17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "windows-gcc-x64",
-            "compilerPath": ""
+            "intelliSenseMode": "windows-gcc-x64"
         }
     ],
     "version": 4

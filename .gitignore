@@ -5,9 +5,20 @@ build-*/
 # 빌드 결과물
 bin/
 debug/
+*.exe
 
-# 데이터
+# IntelliSense / 도구 캐시
+.cache/
+compile_commands.json
+
+# 데이터 (필요 없으면 지우세요)
 data/
 
-# vscode 설정 파일
-# .vscode
+# .vscode 는 이 템플릿의 핵심이므로 커밋합니다.
+# 개인 설정을 분리하고 싶다면 아래를 사용하세요.
+# .vscode/*
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/settings.json
+# !.vscode/c_cpp_properties.json
+# !.vscode/extensions.json

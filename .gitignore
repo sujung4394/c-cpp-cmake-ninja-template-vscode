@@ -8,3 +8,6 @@ debug/
 
 # 데이터
 data/
+
+# vscode 설정 파일
+./vscode

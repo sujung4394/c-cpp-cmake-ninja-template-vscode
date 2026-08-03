@@ -31,20 +31,12 @@
 "compilerPath": "<g++.exe 경로>"
 ```
 
-경로를 채운 후, 아래 명령으로 git이 이 파일들의 변경을 무시하도록 설정합니다.
-
-```bash
-git update-index --skip-worktree .vscode/settings.json
-git update-index --skip-worktree .vscode/launch.json
-git update-index --skip-worktree .vscode/c_cpp_properties.json
-```
-
 PROJECT_NAME에 사용하고자 하는 프로젝트의 이름을 넣습니다. 
 
 ### `CMakeLists.txt`
 
 ```cmake
-project(PROJECT_NAME LANGUAGES CXX)
+project(PROJECT_NAME LANGUAGES CXX C)
 ```
 
 ## 빌드

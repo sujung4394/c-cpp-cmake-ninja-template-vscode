@@ -6,7 +6,7 @@ clone 후 F5만 누르면 빌드와 디버깅이 됩니다.
 ## 요구 사항
 
 - MSYS2 UCRT64 툴체인 (GCC, G++, GDB), CMake 3.20+, Ninja
-- **설치 방법은 [INSTALL.md](INSTALL.md)를 따라 주세요.**
+- **설치 방법은 [docs/INSTALL.md](docs/INSTALL.md)를 따라 주세요.**
 
 `C:\msys64\ucrt64\bin`이 시스템 Path에 등록되어 있어야 합니다.
 이 템플릿은 절대경로를 하드코딩하지 않고 Path에서 도구를 찾습니다.
@@ -19,7 +19,12 @@ cd my-project
 code .
 ```
 
-VSCode가 확장 설치를 안내하면 수락하세요. 그다음 할 일은 두 가지뿐입니다.
+VSCode가 확장 설치를 안내하면 수락하세요.
+
+> 이 안내는 **`.vscode/extensions.json`에 적힌 확장이 아직 설치되어 있지 않을 때만**
+> 뜹니다. 이미 C/C++ · CMake Tools 확장을 쓰고 계셨다면 팝업 없이 조용히 넘어가는
+> 게 정상 동작입니다. 안내가 안 떴다고 확장이 빠진 건 아닌지 걱정되시면 아래
+> [확장이 자동으로 설치되지 않을 때](#확장이-자동으로-설치되지-않을-때)를 참고하세요. 그다음 할 일은 두 가지뿐입니다.
 
 1. `CMakeLists.txt`의 `project(PROJECT_NAME ...)`에 프로젝트 이름 입력
 2. `src/main.cpp` 작성
@@ -93,6 +98,83 @@ CMake 구성(configure)은 빌드 태스크가 알아서 먼저 실행하므로 
 - `.vscode` 폴더는 의도적으로 커밋합니다. 이 템플릿의 본체가 그 안에 있기 때문입니다.
   개인 설정을 분리하고 싶다면 `.gitignore` 하단의 주석 처리된 블록을 참고하세요.
 
+## 확장이 자동으로 설치되지 않을 때
+
+`.vscode/extensions.json`의 `recommendations` 목록은 두 조건을 모두 만족할 때만 팝업을 띄웁니다.
+
+1. 목록에 적힌 확장이 **아직 설치되어 있지 않을 것**
+2. 이 워크스페이스에서 그 안내를 **한 번도 닫거나 무시한 적 없을 것**
+
+**이미 확장이 설치되어 있어서 안 뜨는 경우** — 정상입니다. 직접 확인하려면
+`Ctrl+Shift+X` → 검색창에 `@recommended` 입력 → **Workspace Recommendations**에
+`C/C++`, `CMake Tools`, `CMake`가 보이는지 확인하세요.
+
+**예전에 팝업을 닫아버려서(Don't Show Again) 다시 안 뜨는 경우** — 아래로 초기화합니다.
+
+```
+Ctrl+Shift+P → Preferences: Open User Settings (JSON)
+```
+
+`"extensions.ignoreRecommendations": true`가 있으면 지우거나 `false`로 바꾸세요.
+그래도 안 뜨면 위의 `@recommended` 화면에서 확장별 **⋯ → Install Workspace
+Recommended Extensions**을 눌러 수동으로 설치할 수 있습니다.
+
+## GCC가 여러 버전 설치되어 있을 때
+
+MinGW를 여러 경로에 설치했거나, Path에 여러 GCC 배포판(MSYS2, WinLibs, 다른
+MinGW 등)이 동시에 등록되어 있으면 `gcc`라는 이름만으로는 어떤 것이 잡힐지
+알 수 없습니다. Path 순서상 앞에 있는 게 우선하는데, 그게 원하는 버전이
+아닐 수 있습니다.
+
+이럴 때는 이름 대신 **절대경로**를 직접 적어서 특정 실행 파일을 고정하세요.
+수정할 곳은 네 파일입니다.
+
+**`.vscode/settings.json`**
+
+```jsonc
+"cmake.configureArgs": [
+    "-DCMAKE_MAKE_PROGRAM=C:/msys64/ucrt64/bin/ninja.exe",
+    "-DCMAKE_C_COMPILER=C:/msys64/ucrt64/bin/gcc.exe",
+    "-DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe"
+]
+```
+
+**`.vscode/tasks.json`** — "CMake 구성" 태스크의 `args`도 동일하게 맞춰야 두 설정이
+어긋나지 않습니다.
+
+```jsonc
+"args": [
+    "-S", "${workspaceFolder}",
+    "-B", "${workspaceFolder}/build",
+    "-G", "Ninja Multi-Config",
+    "-DCMAKE_MAKE_PROGRAM=C:/msys64/ucrt64/bin/ninja.exe",
+    "-DCMAKE_C_COMPILER=C:/msys64/ucrt64/bin/gcc.exe",
+    "-DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe"
+]
+```
+
+**`.vscode/launch.json`** — `miDebuggerPath`도 같은 방식으로 고정합니다.
+
+```jsonc
+"miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe"
+```
+
+**`.vscode/c_cpp_properties.json`** — `compilerPath`도 함께 맞춰야 IntelliSense가
+실제 빌드에 쓰는 컴파일러와 다른 버전 헤더를 보는 일이 없습니다.
+
+```jsonc
+"compilerPath": "C:/msys64/ucrt64/bin/g++.exe"
+```
+
+> Windows 경로에서 백슬래시(`\`)를 쓰려면 `\\`로 이스케이프해야 하므로,
+> JSON 안에서는 위 예시처럼 슬래시(`/`)를 쓰는 편이 훨씬 편합니다. CMake와
+> VSCode 모두 슬래시 경로를 문제없이 인식합니다.
+
+이렇게 절대경로로 고정하면 이 프로젝트는 Path에 무엇이 몇 개 등록되어 있든
+항상 지정한 그 실행 파일만 사용합니다. 다만 이 경로는 개발자마다 설치
+위치가 다를 수 있으니, 여러 사람이 함께 쓰는 저장소라면 `.gitignore`에서
+`.vscode`를 무시하도록 바꾸고 각자 로컬에서 채우는 방식을 고려하세요.
+
 ## 문제 해결
 
 | 증상 | 해결 |
@@ -100,5 +182,6 @@ CMake 구성(configure)은 빌드 태스크가 알아서 먼저 실행하므로 
 | `ninja를 찾을 수 없음`, `gcc를 찾을 수 없음` | Path 등록 후 VSCode를 완전히 종료했다가 다시 여세요 |
 | IntelliSense가 빨간 줄만 표시 | 한 번 빌드하면 `build/compile_commands.json`이 생기면서 해결됩니다 |
 | F5를 눌렀는데 `debug/main.exe` 없음 | 빌드 실패입니다. 터미널 패널의 컴파일 에러를 확인하세요 |
-| 디버깅 중 `std::cin`에 입력이 안 됨 | 통합 터미널 탭에 직접 입력하세요 (`console: integratedTerminal`) |
+| 디버깅 중 `std::cin`에 입력이 안 됨 | 정상입니다. `externalConsole: true`로 별도 콘솔 창이 뜨니 그 창에 입력하세요 |
 | 소스를 추가했는데 빌드에 안 들어감 | `build/` 폴더를 지우고 다시 빌드하세요 |
+| 의도한 것과 다른 GCC/컴파일러가 잡힘 | GCC가 여러 버전 설치된 환경입니다. [GCC가 여러 버전 설치되어 있을 때](#gcc가-여러-버전-설치되어-있을-때) 참고 |
